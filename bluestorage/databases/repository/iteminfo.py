@@ -12,16 +12,14 @@ class ItemInfoRepository:
     """
 
     def __init__(self, database: Database) -> None:
-        self.database = database
+        self.Session = database.session_maker
     
     async def create(self, fileinfo: ItemInfo) -> None:
-        Session = self.database.session_maker
-        async with Session.begin() as session:
+        async with self.Session.begin() as session:
             return session.add(fileinfo)
 
     async def update(self, new_fileinfo: ItemInfo) -> None:
-        Session = self.database.session_maker
-        async with Session.begin() as session:
+        async with self.Session.begin() as session:
             fileinfo = await session.get(ItemInfo, new_fileinfo.id)
             
             assert fileinfo
@@ -29,21 +27,18 @@ class ItemInfoRepository:
             fileinfo.path = new_fileinfo.path        
 
     async def read(self, id: str) -> Optional[ItemInfo]:
-        Session = self.database.session_maker
-        async with Session.begin() as session:
+        async with self.Session.begin() as session:
             return await session.get(
                 ItemInfo,
                 id,
             )
 
     async def delete(self, fileinfo: ItemInfo) -> None:
-        Session = self.database.session_maker
-        async with Session.begin() as session:
+        async with self.Session.begin() as session:
             await session.delete(fileinfo)
 
     async def read_all(self) -> Sequence[ItemInfo]:
-        Session = self.database.session_maker
-        async with Session.begin() as session:
+        async with self.Session.begin() as session:
             smst = select(ItemInfo)
 
             result = await session.execute(smst)
