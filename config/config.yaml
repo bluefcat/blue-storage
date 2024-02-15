@@ -12,3 +12,5 @@ server:
 DB:
   upload_dir: "./storage/"
   url: "sqlite+aiosqlite:///test.db"
+TOKEN:
+  expiration_date: 7

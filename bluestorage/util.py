@@ -8,6 +8,8 @@ from typing import Any
 from hashlib import sha256
 from passlib.context import CryptContext
 
+from bluestorage.setting import setting
+
 password_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def load_config(config_path: str) -> Any:
@@ -24,7 +26,8 @@ def generate_token() -> str:
     return secrets.token_urlsafe(32)
 
 def get_expiration_date() -> datetime.datetime:
-    return datetime.datetime.now() + datetime.timedelta(days=7)
+    days = setting["TOKEN"]["expiration_date"]
+    return datetime.datetime.now() + datetime.timedelta(days=days)
 
 
 def get_hash(obj: object) -> str:
