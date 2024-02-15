@@ -12,9 +12,6 @@ from bluestorage.setting import setting
 
 password_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-def load_config(config_path: str) -> Any:
-    with open(config_path) as file:
-        return yaml.safe_load(file)
 
 def get_password_hash(password: str) -> str:
     return password_context.hash(password)
