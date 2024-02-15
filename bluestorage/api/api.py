@@ -37,7 +37,7 @@ async def read_items(
     data = await query.iteminfo.read_all() 
     return data
 
-@api_router.post("/items")
+@api_router.post("/items", status_code=status.HTTP_201_CREATED)
 async def upload_item(
     query: Annotated[Query, Depends(get_query)],
     _: Annotated[User, Depends(get_current_user)],
