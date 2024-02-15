@@ -3,7 +3,11 @@ import pytest_asyncio
 
 from bluestorage.util import get_hash
 from bluestorage.databases.query import Query
-from bluestorage.databases.schema import Base, ItemInfo
+from bluestorage.databases.schema import Base, ItemInfo, User
+
+@pytest.fixture
+def user_one():
+    return User(id=get_hash("testuser"), username="testuser", password="testpassword")
 
 @pytest.fixture
 def fileinfo_one():
@@ -22,12 +26,14 @@ async def _query():
 
 @pytest_asyncio.fixture(scope="function")
 async def query(
-    _query: Query, 
+    _query: Query,
+    user_one: User,
     fileinfo_one: ItemInfo,
     fileinfo_two: ItemInfo,
 ):
     async with _query.database.engine.begin() as connection:
         await connection.run_sync(Base.metadata.create_all, checkfirst=True)
+    await _query.user.create(user_one)
     await _query.iteminfo.create(fileinfo_one)
     await _query.iteminfo.create(fileinfo_two)
 
