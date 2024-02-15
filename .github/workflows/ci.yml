@@ -27,7 +27,12 @@ jobs:
       - name: Setup pip and Install dependencies
         run: |
           python -m pip install pip
+          pip install pytest pytest-cov
           pip install -r requirements.txt
-      - name: Check type
-        run: python -m pytest tests 
+      - name: pytest 
+        run: python -m pytest --cov=bluestorage tests
+      - name: Upload coverage data to coveralls.io
+        run: |
+          python -m pip install coveralls
+          coveralls --service=github
   
