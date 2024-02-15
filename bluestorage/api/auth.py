@@ -19,13 +19,13 @@ from bluestorage.util import get_hash, verify_password
 from bluestorage.databases.query import Query
 from bluestorage.databases.schema import User, Token
 
-from bluestorage.api import get_query
+from bluestorage.api import app
 
 auth_router = APIRouter()
 
 @auth_router.post("/signup", status_code=status.HTTP_201_CREATED)
 async def signup(
-    query: Annotated[Query, Depends(get_query)],
+    query: Annotated[Query, Depends(app.get_query)],
     username: str, 
     password: str,
 ) -> User:
@@ -43,7 +43,7 @@ async def signup(
     return user
 
 async def authenticate(username: str, password: str):
-    query = await get_query()
+    query = await app.get_query()
 
     user = await query.user.read_username(username)
     if not user or not verify_password(password, user.password):
@@ -53,7 +53,7 @@ async def authenticate(username: str, password: str):
 
 @auth_router.post("/signin")
 async def signin(
-    query: Annotated[Query, Depends(get_query)],
+    query: Annotated[Query, Depends(app.get_query)],
     form_data: Annotated[
         OAuth2PasswordRequestForm,
         Depends(OAuth2PasswordRequestForm),
@@ -83,7 +83,7 @@ async def signin(
     }
 
 async def get_current_user(
-    query: Annotated[Query, Depends(get_query)],
+    query: Annotated[Query, Depends(app.get_query)],
     access_token: str= Depends(OAuth2PasswordBearer(tokenUrl="/signin"))
 ):
     token = await query.token.read_token(access_token)

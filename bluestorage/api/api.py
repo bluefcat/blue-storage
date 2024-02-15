@@ -18,7 +18,7 @@ from bluestorage.util import get_hash
 from bluestorage.databases.query import Query
 from bluestorage.databases.schema import ItemInfo, User
 
-from bluestorage.api import get_query
+from bluestorage.api import app
 from bluestorage.api.auth import get_current_user
 
 api_router = APIRouter()
@@ -30,7 +30,7 @@ async def root() -> dict:
 
 @api_router.get("/items")
 async def read_items(
-    query: Annotated[Query, Depends(get_query)],
+    query: Annotated[Query, Depends(app.get_query)],
     user: Annotated[User, Depends(get_current_user)]
 ) -> Sequence[ItemInfo]:
     _ = user
@@ -39,7 +39,7 @@ async def read_items(
 
 @api_router.post("/items", status_code=status.HTTP_201_CREATED)
 async def upload_item(
-    query: Annotated[Query, Depends(get_query)],
+    query: Annotated[Query, Depends(app.get_query)],
     _: Annotated[User, Depends(get_current_user)],
     item: UploadFile, 
 ) -> dict:
@@ -66,7 +66,7 @@ async def upload_item(
 
 @api_router.get("/items/{id}")
 async def read_item(
-    query: Annotated[Query, Depends(get_query)],
+    query: Annotated[Query, Depends(app.get_query)],
     _: Annotated[User, Depends(get_current_user)],
     id: str, 
 ) -> StreamingResponse:
@@ -87,7 +87,7 @@ async def read_item(
 
 @api_router.put("/items/{id}")
 async def update_item(
-    query: Annotated[Query, Depends(get_query)],
+    query: Annotated[Query, Depends(app.get_query)],
     _: Annotated[User, Depends(get_current_user)],
     id: str, 
     name: str,
@@ -102,7 +102,7 @@ async def update_item(
 
 @api_router.delete("/items/{id}")
 async def delete_item(
-    query: Annotated[Query, Depends(get_query)],
+    query: Annotated[Query, Depends(app.get_query)],
     _: Annotated[User, Depends(get_current_user)],
     id: str,
 ):

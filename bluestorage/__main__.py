@@ -1,14 +1,12 @@
 import asyncio
 from uvicorn import Config, Server
-from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from bluestorage.api import app
 from bluestorage.api.auth import auth_router
 from bluestorage.api.api import api_router
 
 from bluestorage.setting import setting
-
-app: FastAPI = FastAPI()
 
 origins = ["*"]
 app.add_middleware(
