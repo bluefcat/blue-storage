@@ -8,6 +8,12 @@
 pip install -r requirements.txt
 ```
 
+## TEST
+
+```py
+python -m pytest tests
+```
+
 ## RUN
 
 ```py
