@@ -18,6 +18,12 @@ services:
     depends_on:
       - db
     build: .
+    volumes:
+      - ./bluestorage/:/app/bluestorage/
+      - ./tests/:/app/tests/
+      - ./config/:/app/config/
+    command:
+      ["python", "-m", "bluestorage"]
     ports:
       - "8000:8000"
     networks:
