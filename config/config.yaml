@@ -11,6 +11,6 @@ server:
   # ssl_certfile: "./config/cert.pem"
 DB:
   upload_dir: "./storage/"
-  url: "sqlite+aiosqlite:///test.db"
+  url: "postgresql+asyncpg://blue:blue@db/bluestorage" 
 TOKEN:
   expiration_date: 7

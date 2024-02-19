@@ -1,0 +1,30 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres 
+    volumes:
+      - db:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=blue
+      - POSTGRES_PASSWORD=blue
+      - POSTGRES_DB=bluestorage
+    networks:
+      - bluestorage
+
+  bluestorage:
+    depends_on:
+      - db
+    build: .
+    ports:
+      - "8000:8000"
+    networks:
+      - bluestorage
+
+volumes:
+  db: {}
+
+networks:
+  bluestorage: {}
