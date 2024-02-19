@@ -4,12 +4,11 @@ import pytest_asyncio
 from asgi_lifespan import LifespanManager
 from httpx import AsyncClient
 
-from bluestorage.setting import setting
 from bluestorage.api import BlueAPI 
 from bluestorage.api.api import api_router
 from bluestorage.api.auth import auth_router
 
-from bluestorage.databases.schema import Base, User
+from bluestorage.databases.schema import Base
 
 
 @pytest.fixture(scope="session")
@@ -39,10 +38,10 @@ async def client(application: BlueAPI, _client: AsyncClient):
         await connection.run_sync(Base.metadata.drop_all)
 
 @pytest_asyncio.fixture(scope="function")
-async def token(_client: AsyncClient):
-    await _client.post("/signup?username=testuser&password=testpassword")
-    
-    token = await _client.post("/signin", data={
+async def token(application: BlueAPI, client: AsyncClient):
+    await client.post("/signup?username=testuser&password=testpassword")
+
+    token = await client.post("/signin", data={
         "username": "testuser",
         "password": "testpassword"
     })
